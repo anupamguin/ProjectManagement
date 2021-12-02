@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anupam.ProjectManagement.demo.Backlog;
+import com.anupam.ProjectManagement.demo.Project;
 import com.anupam.ProjectManagement.demo.ProjectTask;
+import com.anupam.ProjectManagement.exceptions.ProjectNotFoundException;
 import com.anupam.ProjectManagement.repositories.BacklogRepository;
+import com.anupam.ProjectManagement.repositories.ProjectRepository;
 import com.anupam.ProjectManagement.repositories.ProjectTaskRepository;
 
 @Service
@@ -18,9 +21,13 @@ public class ProjectTaskService {
 
 	@Autowired
 	ProjectTaskRepository projectTaskRepository;
+	
+	@Autowired
+	ProjectRepository projectRepository;
 
 	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
 
+		try {
 // ProjectServiceTask to be added to a specific project ,project !=null, Backlog exists
 		Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
 // set the Backlog to ProjectTask
@@ -44,11 +51,19 @@ public class ProjectTaskService {
 		}
 
 		return projectTaskRepository.save(projectTask);
+	 }catch(Exception e) {
+		 throw new ProjectNotFoundException("Project Not Found");
+	 }
 	}
 
 	
 	public Iterable<ProjectTask> findBacklogById(String backlog_id) {
 		
+		Project project=projectRepository.findByProjectIdentifier(backlog_id);
+		if(project == null)
+		{
+			throw new ProjectNotFoundException("Project with Id: "+backlog_id+" does not exists");
+		}
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_id);
 	}
 }

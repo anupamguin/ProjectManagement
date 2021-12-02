@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anupam.ProjectManagement.demo.ProjectTask;
+import com.anupam.ProjectManagement.repositories.ProjectTaskRepository;
 import com.anupam.ProjectManagement.services.MapValidationErrorService;
 import com.anupam.ProjectManagement.services.ProjectTaskService;
 
@@ -53,6 +55,19 @@ public class BacklogController {
 		
 		ProjectTask projectTask = projectTaskService.findPTByProjectSequence(backlog_id,pt_id);
 		return new ResponseEntity<ProjectTask>(projectTask,HttpStatus.OK);
+	}
+	
+	@PatchMapping("/{backlog_id}/{pt_id}")
+	public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask,BindingResult result
+			,@PathVariable String backlog_id, @PathVariable String pt_id){
+		
+		ResponseEntity<?> errorMap=mapValidationErrorService.mapValidationService(result);
+		if(errorMap != null) 
+			return errorMap;
+		
+		ProjectTask updateTask = projectTaskService.updateByProjectSequence(projectTask, backlog_id, pt_id);
+		
+		return new ResponseEntity<ProjectTask>(updateTask,HttpStatus.OK);
 	}
 	
 }

@@ -1,6 +1,5 @@
 package com.anupam.ProjectManagement.services;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +64,10 @@ public class ProjectTaskService {
 			throw new ProjectNotFoundException("Project with Id: "+backlog_id+" does not exists");
 		}
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_id);
+	}
+	
+	public ProjectTask findPTByProjectSequence(String backlog_id,String pt_id) {
+		// make sure that we are searching on the right backlog
+		return projectTaskRepository.findByProjectSequence(pt_id);
 	}
 }

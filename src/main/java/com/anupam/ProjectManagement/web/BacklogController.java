@@ -1,7 +1,5 @@
 package com.anupam.ProjectManagement.web;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.anupam.ProjectManagement.demo.ProjectTask;
-import com.anupam.ProjectManagement.repositories.ProjectTaskRepository;
 import com.anupam.ProjectManagement.services.MapValidationErrorService;
 import com.anupam.ProjectManagement.services.ProjectTaskService;
 

@@ -1,8 +1,6 @@
 package com.anupam.ProjectManagement.services;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +41,7 @@ public class ProjectTaskService {
 		projectTask.setProjectSequence(projectIdentifier + "-" + BacklogSequence);
 		projectTask.setProjectIdentifier(projectIdentifier);
 // Initial Priority when Priority null
-		if (projectTask.getPriority() == null) { // In future we need projectTask.getPriority() == 0 to handle the form
+		if (projectTask.getPriority()==0|| projectTask.getPriority() == null) { // In future we need projectTask.getPriority() == 0 to handle the form
 			projectTask.setPriority(3);
 		}
 // Initial status when status is null

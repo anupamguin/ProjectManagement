@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.anupam.ProjectManagement.demo.Project;
 import com.anupam.ProjectManagement.demo.User;
 import com.anupam.ProjectManagement.services.MapValidationErrorService;
 import com.anupam.ProjectManagement.services.UserService;
@@ -26,10 +27,9 @@ public class UserController {
 	UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
+	public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult bindingResult){
 		// Validate passwords match
-
-		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
+		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
 		if(errorMap != null) return errorMap;
 
 		User newUser=userService.saveUser(user);

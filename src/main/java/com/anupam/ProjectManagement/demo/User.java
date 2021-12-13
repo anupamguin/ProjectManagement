@@ -29,7 +29,7 @@ public class User implements UserDetails{
 
 	@Email(message = "Username needs to be an email")
 	@NotBlank(message = "Username is Required")
-	@Column(unique = true)
+	@Column(unique = true,length=32)
 	private String username;
 
 	@NotBlank(message = "Please enter your Full Name")

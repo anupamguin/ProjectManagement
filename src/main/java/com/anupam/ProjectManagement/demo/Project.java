@@ -2,64 +2,78 @@ package com.anupam.ProjectManagement.demo;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotBlank(message = "Project Name is Required")
 	private String projectName;
-	
+
 	@NotBlank(message = "Project Identifier is Required")
-	@Size(min = 4, max=5, message = "Please use 4 to 5 Characters")
+	@Size(min = 4, max = 5, message = "Please use 4 to 5 Characters")
 	@Column(updatable = false, unique = true)
 	private String projectIdentifier;
-	
+
 	@NotBlank(message = "Project description is Required")
 	private String description;
-	
+
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date start_date;
-	
+
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date end_date;
-	
+
 	@Column(updatable = false)
-	@JsonFormat(pattern = "yyyy-mm-dd") 
+	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date created_At;
-	
+
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updated_At;
 
-	@OneToOne(fetch= FetchType.EAGER,cascade = CascadeType.ALL, mappedBy = "project")
-	
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+	@JsonIgnore
 	private Backlog backlog;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private User user;
+
+	private String projectLeader;
 	
+	public Project() {
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getProjectLeader() {
+		return projectLeader;
+	}
+
+	public void setProjectLeader(String projectLeader) {
+		this.projectLeader = projectLeader;
+	}
+
 	public Backlog getBacklog() {
 		return backlog;
 	}
 
 	public void setBacklog(Backlog backlog) {
 		this.backlog = backlog;
-	}
-
-	public Project() {
 	}
 
 	public Long getId() {

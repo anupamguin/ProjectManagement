@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 
 import com.anupam.ProjectManagement.demo.Backlog;
 import com.anupam.ProjectManagement.demo.Project;
+import com.anupam.ProjectManagement.demo.User;
 import com.anupam.ProjectManagement.exceptions.ProjectIdException;
 import com.anupam.ProjectManagement.repositories.BacklogRepository;
 import com.anupam.ProjectManagement.repositories.ProjectRepository;
+import com.anupam.ProjectManagement.repositories.UserRepository;
 
 @Service
 public class ProjectService {
@@ -18,10 +20,17 @@ public class ProjectService {
 	@Autowired
 	private BacklogRepository backlogRepository;
 	
-	public Project saveOrUpdateProject(Project project) {
+	@Autowired
+	private UserRepository userRepository;
+	
+	public Project saveOrUpdateProject(Project project,String username) {
 		
 		try {
-			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			  User user=userRepository.findByUsername(username);
+			  project.setUser(user);
+			  project.setProjectLeader(user.getUsername());
+			
+			  project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 			
 			if(project.getId() == null) {
 				

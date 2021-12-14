@@ -1,15 +1,11 @@
 package com.anupam.ProjectManagement.demo;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -43,6 +39,10 @@ public class User implements UserDetails{
 
 	private Date created_At;
 	private Date updated_At;
+	
+	//OneToMany with Project
+	@OneToMany(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER, mappedBy = "user",orphanRemoval = true)
+	private List<Project> projects=new ArrayList<>();
 
 	@PrePersist
 	protected void onCreate() {
@@ -54,10 +54,16 @@ public class User implements UserDetails{
 		this.updated_At = new Date();
 	}
 	
-	//OneToMany with Project
-	
 	public User() {
 		super();
+	}
+	
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
 	}
 
 	public Long getId() {

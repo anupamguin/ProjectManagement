@@ -1,6 +1,8 @@
 package com.anupam.ProjectManagement.web;
 
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +34,13 @@ public class ProjectController {
 	private MapValidationErrorService mapValidationErrorService;
 	
 	@PostMapping("")
-	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult)
+	public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult,Principal principal)
 	{
 		ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(bindingResult);
 		if(errorMap != null) 
 			return errorMap;
 	
-		Project project1 = projectService.saveOrUpdateProject(project);
+		Project project1 = projectService.saveOrUpdateProject(project,principal.getName());
 		return new ResponseEntity<Project>(project1,HttpStatus.CREATED);
 	}
 	

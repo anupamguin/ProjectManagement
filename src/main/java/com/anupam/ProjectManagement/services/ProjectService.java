@@ -7,6 +7,7 @@ import com.anupam.ProjectManagement.demo.Backlog;
 import com.anupam.ProjectManagement.demo.Project;
 import com.anupam.ProjectManagement.demo.User;
 import com.anupam.ProjectManagement.exceptions.ProjectIdException;
+import com.anupam.ProjectManagement.exceptions.ProjectNotFoundException;
 import com.anupam.ProjectManagement.repositories.BacklogRepository;
 import com.anupam.ProjectManagement.repositories.ProjectRepository;
 import com.anupam.ProjectManagement.repositories.UserRepository;
@@ -51,26 +52,31 @@ public class ProjectService {
 		}
 	}
 	
-	public Project findByProjectIdentifier(String projectId)
+	public Project findByProjectIdentifier(String projectId,String username)
 	{
 		Project project = projectRepository.findByProjectIdentifier(projectId);
 		if(project == null)
 		 throw new ProjectIdException("Project Id: "+projectId+" does not exists");
 		
+		if(!project.getProjectLeader().equals(username))
+			throw new ProjectNotFoundException("Project not Found in Your Account");
+		
 		return project; 
 	}
 	
-	public Iterable<Project> findAllProjects()
+	public Iterable<Project> findAllProjects(String username)
 	{		
-		return projectRepository.findAll();	
+		return projectRepository.findAllByProjectLeader(username);	
 	}
 	
-	public void deleteProjectByIdentifier(String projectId)
+	public void deleteProjectByIdentifier(String projectId, String username)
 	{
-		Project project = projectRepository.findByProjectIdentifier(projectId);
-		if(project == null)
-			throw new ProjectIdException("Cannot Project with Id '"+projectId+"' .This Project does not exist");
+//		Project project = projectRepository.findByProjectIdentifier(projectId);
+//		if(project == null)
+//			throw new ProjectIdException("Cannot Project with Id '"+projectId+"' .This Project does not exist");
 		
-		projectRepository.delete(project);
+//		projectRepository.delete(project);
+		
+		projectRepository.delete(findByProjectIdentifier(projectId,username));
 	}
 }

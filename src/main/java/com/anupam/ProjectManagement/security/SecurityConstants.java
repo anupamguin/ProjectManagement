@@ -12,5 +12,5 @@ public class SecurityConstants {
 	
 	public static final String HEADER_STRING="Authorization";
 	
-	public static final long EXPIRATION_TIME = 1000*60*5;	// 30 Seconds
+	public static final long EXPIRATION_TIME = 1000*60*60*2;	// 2 hours in miliseconds
 }

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anupam.ProjectManagement.demo.Backlog;
-import com.anupam.ProjectManagement.demo.Project;
 import com.anupam.ProjectManagement.demo.ProjectTask;
 import com.anupam.ProjectManagement.exceptions.ProjectNotFoundException;
 import com.anupam.ProjectManagement.repositories.BacklogRepository;
@@ -23,12 +22,16 @@ public class ProjectTaskService {
 	
 	@Autowired
 	ProjectRepository projectRepository;
+	
+	@Autowired
+	ProjectService projectService;
 
-	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask,String username) {
 
-		try {
+		
 // ProjectServiceTask to be added to a specific project ,project !=null, Backlog exists
-		Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+		//Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+		Backlog backlog = projectService.findByProjectIdentifier(projectIdentifier,username).getBacklog();
 // set the Backlog to ProjectTask
 		projectTask.setBacklog(backlog);
 // We want our project sequence be like this: IDPRO-1 , IDPRO-2 ...100,101
@@ -41,7 +44,7 @@ public class ProjectTaskService {
 		projectTask.setProjectSequence(projectIdentifier + "-" + BacklogSequence);
 		projectTask.setProjectIdentifier(projectIdentifier);
 // Initial Priority when Priority null
-		if (projectTask.getPriority()==0|| projectTask.getPriority() == null) { // In future we need projectTask.getPriority() == 0 to handle the form
+		if (projectTask.getPriority() == null || projectTask.getPriority()==0) { // In future we need projectTask.getPriority() == 0 to handle the form
 			projectTask.setPriority(3);
 		}
 // Initial status when status is null
@@ -50,19 +53,18 @@ public class ProjectTaskService {
 		}
 
 		return projectTaskRepository.save(projectTask);
-	 }catch(Exception e) {
-		 throw new ProjectNotFoundException("Project Not Found");
-	 }
+	 
 	}
 
 	
-	public Iterable<ProjectTask> findBacklogById(String backlog_id) {
+	public Iterable<ProjectTask> findBacklogById(String backlog_id,String username) {
 		
-		Project project=projectRepository.findByProjectIdentifier(backlog_id);
-		if(project == null)
-		{
-			throw new ProjectNotFoundException("Project with Id: "+backlog_id+" does not exists");
-		}
+//		Project project=projectRepository.findByProjectIdentifier(backlog_id,username);
+//		if(project == null)
+//		{
+//			throw new ProjectNotFoundException("Project with Id: "+backlog_id+" does not exists");
+//		}
+        projectService.findByProjectIdentifier(backlog_id, username);
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(backlog_id);
 	}
 	

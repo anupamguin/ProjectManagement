@@ -86,6 +86,6 @@ public class ProjectService {
 
 //		projectRepository.delete(project);
 
-		projectRepository.delete(findByProjectIdentifier(projectId, username));
+		projectRepository.delete(findByProjectIdentifier(projectId,username));
 	}
 }

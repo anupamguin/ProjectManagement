@@ -38,8 +38,10 @@ public class JwtTokenProvider {
 		claims.put("username", user.getUsername());
 		claims.put("fullname", user.getFullname());
 		
-		return Jwts.builder().setSubject(userId).setClaims(claims)
-				.setIssuedAt(expiryDate)
+		return Jwts.builder().setSubject(userId)
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(expiryDate)
 				.signWith(SignatureAlgorithm.HS512, SECRET)
 				.compact();
 	}

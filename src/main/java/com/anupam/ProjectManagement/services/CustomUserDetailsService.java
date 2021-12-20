@@ -1,5 +1,7 @@
 package com.anupam.ProjectManagement.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,14 +21,14 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		User user = userRepository.findByUsername(username);
-		if(user == null)  new UsernameNotFoundException("User not Found");
+		if(user == null)  throw new UsernameNotFoundException("User not Found");
 		return user;
 	}
 	
 	@Transactional
 	public User loadUserById(Long id) {
-		User user=userRepository.getById(id);
-		if(user==null) new UsernameNotFoundException("User not Found");
+		User user=userRepository.findById(id).get();
+		if(user==null) throw new UsernameNotFoundException("User not Found");
 		return user;
 	}
 	

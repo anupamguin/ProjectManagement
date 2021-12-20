@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.GenerationType;
 
 @Entity
+@Table(name = "system_user")
 public class User implements UserDetails{
 
 	@Id
@@ -29,9 +30,11 @@ public class User implements UserDetails{
 	private String username;
 
 	@NotBlank(message = "Please enter your Full Name")
+	@Column
 	private String fullname;
 
 	@NotBlank(message = "Password field is Required")
+	@Column
 	private String password;
 
 	@Transient
@@ -41,7 +44,7 @@ public class User implements UserDetails{
 	private Date updated_At;
 	
 	//OneToMany with Project
-	@OneToMany(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER, mappedBy = "user",orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.REFRESH,fetch = FetchType.EAGER, mappedBy = "user")
 	private List<Project> projects=new ArrayList<>();
 
 	@PrePersist
